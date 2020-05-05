@@ -6,7 +6,7 @@ jobs:
       - image: cimg/rust:1.43.0
 
     environment:
-      TZ: "/usr/share/zoneinfo/Europe/Paris"
+      TZ: "/usr/share/zoneinfo/Europe/Kiev"
 
     steps:
       - checkout
@@ -15,6 +15,7 @@ jobs:
       - run:
           name: Check formatting
           command: |
+            rustup component add rustfmt clippy
             rustfmt --version
             cargo clippy --all-targets --all-features -- -D warnings
             cargo fmt -- --check
@@ -23,13 +24,13 @@ jobs:
           command: |
             rustup run nightly rustc --version --verbose
             rustup run nightly cargo --version --verbose
-            rustup run nightly cargo build
+            rustup run nightly cargo build --verbose
       - run:
           name: Stable Build
           command: |
             rustup run stable rustc --version --verbose
             rustup run stable cargo --version --verbose
-            rustup run stable cargo build
+            rustup run stable cargo build --verbose
       - run:
           name: Test
           command: rustup run stable cargo test
