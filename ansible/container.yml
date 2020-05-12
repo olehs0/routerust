@@ -1,25 +1,18 @@
 ---
-
 - hosts: localhost
   tasks:
-    - name: Run database container
-      docker_container:
-        name: database
-        image: postgres:11.0
-        state: started
-        env:
-          POSTGRESQL_USER: user
-          POSTGRESQL_PASSWORD: password
-          POSTGRESQL_DATABASE: my_db
     - name: Start server container
       docker_container:
         name: routerust-server
         image: routerust:1.0
         state: started
-        command: "./routerust/routeguide-server"
+        command: "./target/release/routeguide-server"
+        network_mode: host
+
     - name: Start client container
       docker_container:
         name: routerust-client
         image: routerust:1.0
         state: started
-        command: "./routerust/routeguide-client"
+        command: "./target/release/routeguide-client"
+        network_mode: host
