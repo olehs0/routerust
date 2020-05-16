@@ -137,16 +137,25 @@ impl RouteGuide for RouteGuideService {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "127.0.0.1:8000".parse().unwrap();
 
-    println!("RouteGuideServer listening on: {}", addr);
-
     let route_guide = RouteGuideService {
         features: Arc::new(data::load()),
     };
 
-    // let svc = RouteGuideServer::new(route_guide);
     let svc = RouteGuideServer::with_interceptor(route_guide, check_auth);
 
-    Server::builder().add_service(svc).serve(addr).await?;
+    // let cert = std::fs::read_to_string("server.pem")?;
+    // let key = std::fs::read_to_string("server.key")?;
+
+    println!("RouteGuideServer listening on: {}", addr);
+    Server::builder()
+        // .tls_config(
+        //     tonic::transport::server::ServerTlsConfig::new()
+        //         .identity(tonic::transport::Identity::from_pem(cert, key)),
+        // )
+        .concurrency_limit_per_connection(32)
+        .add_service(svc)
+        .serve(addr)
+        .await?;
 
     Ok(())
 }

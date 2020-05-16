@@ -91,13 +91,24 @@ async fn run_route_chat(client: &mut RouteGuideClient<Channel>) -> Result<(), Bo
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let channel = Channel::from_static("http://127.0.0.1:8000").connect().await?;
+    // let cert = std::fs::read_to_string("client.key.pem")?;
+    let channel = Channel::from_static("http://127.0.0.1:8000")
+        .connect()
+        .await?;
+    // .tls_config(
+    //     tonic::transport::ClientTlsConfig::new()
+    //         .ca_certificate(tonic::transport::Certificate::from_pem(cert))
+    //         .domain_name("localhost")
+    // )
+    // .rate_limit(5, Duration::from_secs(1))
+    // .concurrency_limit(256)
+    // .connect()
+    // .await?;
     let token = MetadataValue::from_str("Bearer TOKEN")?;
     let mut client = RouteGuideClient::with_interceptor(channel, move |mut req: Request<()>| {
         req.metadata_mut().insert("authorization", token.clone());
         Ok(req)
     });
-    // let mut client = RouteGuideClient::connect("http://[::1]:10000").await?;
 
     println!("*** SIMPLE RPC ***");
     let response = client
