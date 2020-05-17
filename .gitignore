@@ -1,4 +1,7 @@
 /target
+ca-key.pem
+client-key.pem
+server-key.pem
 terraform.tfstate
 terraform.tfstate.backup
 .terraform
