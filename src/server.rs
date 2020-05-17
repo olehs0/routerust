@@ -1,3 +1,4 @@
+use dotenv;
 use std::cmp::{Ord, Ordering};
 use std::collections::BTreeMap;
 use std::pin::Pin;
@@ -11,6 +12,8 @@ use tonic::{metadata::MetadataValue, Request, Response, Status};
 
 use routeguide::route_guide_server::{RouteGuide, RouteGuideServer};
 use routeguide::{Feature, Point, Rectangle, RouteNote, RouteSummary};
+
+mod db_connection;
 
 pub mod routeguide {
     tonic::include_proto!("routeguide");
@@ -135,7 +138,9 @@ impl RouteGuide for RouteGuideService {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dotenv::dotenv().ok();
     let addr = "127.0.0.1:8000".parse().unwrap();
+    db_connection::pg_pool_handler()?;
 
     let route_guide = RouteGuideService {
         features: Arc::new(data::load()),

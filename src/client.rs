@@ -41,7 +41,7 @@ async fn print_features(client: &mut RouteGuideClient<Channel>) -> Result<(), Bo
 
 async fn run_record_route(client: &mut RouteGuideClient<Channel>) -> Result<(), Box<dyn Error>> {
     let mut rng = rand::thread_rng();
-    let point_count: i32 = rng.gen_range(2, 100);
+    let point_count: i32 = 12;
 
     let mut points = vec![];
     for _ in 0..=point_count {
@@ -125,8 +125,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n*** CLIENT STREAMING ***");
     run_record_route(&mut client).await?;
 
-    println!("\n*** BIDIRECTIONAL STREAMING ***");
-    run_route_chat(&mut client).await?;
+    // println!("\n*** BIDIRECTIONAL STREAMING ***");
+    // run_route_chat(&mut client).await?;
 
     Ok(())
 }
