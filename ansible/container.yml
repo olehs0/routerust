@@ -1,18 +1,22 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Start server container
-      docker_container:
-        name: routerust-server
-        image: routerust:1.0
-        state: started
-        command: "./target/release/routeguide-server"
-        network_mode: host
+      - name: Start database container
+        docker_container:
+            name: route-db
+            image: postgres:11.0
+      - name: Start server container
+        docker_container:
+            name: routerust-server
+            image: routerust:1.0
+            state: started
+            command: "./routeguide-server"
+            network_mode: host
 
-    - name: Start client container
-      docker_container:
-        name: routerust-client
-        image: routerust:1.0
-        state: started
-        command: "./target/release/routeguide-client"
-        network_mode: host
+      - name: Start client container
+        docker_container:
+            name: routerust-client
+            image: routerust:1.0
+            state: started
+            command: "./routeguide-client"
+            network_mode: host

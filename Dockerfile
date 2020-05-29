@@ -9,7 +9,16 @@ COPY . .
 
 RUN rustup component add rustfmt
 RUN cargo build --release
+
+# ------------------------------------------------------------------------------
+# Cargo Deploy Stage
+# ------------------------------------------------------------------------------
+FROM alpine
 EXPOSE 8000
 
-CMD ["./target/release/routeguide-server"]
+COPY --from=cargo-build /code/target/release/* ./
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+
+CMD ["./routeguide-server"]
 
