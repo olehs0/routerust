@@ -116,7 +116,7 @@ impl RouteGuide for RouteGuideService {
         &self,
         request: Request<tonic::Streaming<RouteNote>>,
     ) -> Result<Response<Self::RouteChatStream>, Status> {
-        println!("RouteChat");
+        println!("RouteChatServer");
 
         let mut notes = BTreeMap::new();
         let mut stream = request.into_inner();
@@ -131,6 +131,7 @@ impl RouteGuide for RouteGuideService {
                 location_notes.push(note);
 
                 for note in location_notes {
+                    println!("{:?}", note);
                     yield note.clone();
                 }
             }
@@ -174,15 +175,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let svc = RouteGuideServer::with_interceptor(route_guide, check_auth);
 
-    // let cert = std::fs::read_to_string("server.pem")?;
-    // let key = std::fs::read_to_string("server.key")?;
-
     println!("RouteGuideServer listening on: {}", addr);
     Server::builder()
-        // .tls_config(
-        //     tonic::transport::server::ServerTlsConfig::new()
-        //         .identity(tonic::transport::Identity::from_pem(cert, key)),
-        // )
         .concurrency_limit_per_connection(32)
         .add_service(svc)
         .serve(addr)

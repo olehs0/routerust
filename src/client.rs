@@ -41,7 +41,7 @@ async fn print_features(client: &mut RouteGuideClient<Channel>) -> Result<(), Bo
 
 async fn run_record_route(client: &mut RouteGuideClient<Channel>) -> Result<(), Box<dyn Error>> {
     let mut rng = rand::thread_rng();
-    let point_count: i32 = 12;
+    let point_count: i32 = rng.gen_range(2, 100);
 
     let mut points = vec![];
     for _ in 0..=point_count {
@@ -83,7 +83,7 @@ async fn run_route_chat(client: &mut RouteGuideClient<Channel>) -> Result<(), Bo
     let mut inbound = response.into_inner();
 
     while let Some(note) = inbound.message().await? {
-        println!("NOTE = {:?}", note);
+        println!("CLIENT NOTE = {:?}", note);
     }
 
     Ok(())
@@ -91,19 +91,11 @@ async fn run_route_chat(client: &mut RouteGuideClient<Channel>) -> Result<(), Bo
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // let cert = std::fs::read_to_string("client.key.pem")?;
-    let channel = Channel::from_static("http://127.0.0.1:8000")
+    let channel = Channel::from_static("http://localhost:8000")
+        .rate_limit(5, Duration::from_secs(1))
+        .concurrency_limit(256)
         .connect()
         .await?;
-    // .tls_config(
-    //     tonic::transport::ClientTlsConfig::new()
-    //         .ca_certificate(tonic::transport::Certificate::from_pem(cert))
-    //         .domain_name("localhost")
-    // )
-    // .rate_limit(5, Duration::from_secs(1))
-    // .concurrency_limit(256)
-    // .connect()
-    // .await?;
     let token = MetadataValue::from_str("Bearer TOKEN")?;
     let mut client = RouteGuideClient::with_interceptor(channel, move |mut req: Request<()>| {
         req.metadata_mut().insert("authorization", token.clone());
@@ -125,8 +117,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n*** CLIENT STREAMING ***");
     run_record_route(&mut client).await?;
 
-    // println!("\n*** BIDIRECTIONAL STREAMING ***");
-    // run_route_chat(&mut client).await?;
+    println!("\n*** BIDIRECTIONAL STREAMING ***");
+    run_route_chat(&mut client).await?;
 
     Ok(())
 }
