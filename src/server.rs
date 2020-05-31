@@ -141,33 +141,10 @@ impl RouteGuide for RouteGuideService {
     }
 }
 
-use crate::schema::engines;
-use diesel::prelude::*;
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, PartialEq, Queryable, Serialize, Deserialize)]
-struct Engine {
-    pub id: i32,
-    pub name: String,
-}
-
-impl Engine {
-    pub fn list(connection: db_connection::PgPooledConnection) {
-        let result = engines::table
-            .limit(10)
-            .select((engines::id, engines::name))
-            .load::<Engine>(&connection)
-            .expect("Error fetch engines");
-        println!("{:?}", result);
-    }
-}
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv::dotenv().ok();
     let addr = "127.0.0.1:8000".parse().unwrap();
-    let pool = db_connection::pg_pool_handler();
-    Engine::list(pool);
 
     let route_guide = RouteGuideService {
         features: Arc::new(data::load()),
