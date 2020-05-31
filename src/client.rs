@@ -83,7 +83,7 @@ async fn run_route_chat(client: &mut RouteGuideClient<Channel>) -> Result<(), Bo
     let mut inbound = response.into_inner();
 
     while let Some(note) = inbound.message().await? {
-        println!("CLIENT NOTE = {:?}", note);
+        println!("NOTE = {:?}", note);
     }
 
     Ok(())
@@ -102,23 +102,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(req)
     });
 
-    println!("*** SIMPLE RPC ***");
-    let response = client
-        .get_feature(Request::new(Point {
-            latitude: 409_146_138,
-            longitude: -746_188_906,
-        }))
-        .await?;
-    println!("RESPONSE = {:?}", response);
+    // println!("*** SIMPLE RPC ***");
+    // let response = client
+    //     .get_feature(Request::new(Point {
+    //         latitude: 409_146_138,
+    //         longitude: -746_188_906,
+    //     }))
+    //     .await?;
+    // println!("RESPONSE = {:?}", response);
 
-    println!("\n*** SERVER STREAMING ***");
-    print_features(&mut client).await?;
+    // println!("\n*** SERVER STREAMING ***");
+    // print_features(&mut client).await?;
 
-    println!("\n*** CLIENT STREAMING ***");
-    run_record_route(&mut client).await?;
+    // println!("\n*** CLIENT STREAMING ***");
+    // run_record_route(&mut client).await?;
 
-    // println!("\n*** BIDIRECTIONAL STREAMING ***");
-    // run_route_chat(&mut client).await?;
+    println!("\n*** BIDIRECTIONAL STREAMING ***");
+    run_route_chat(&mut client).await?;
 
     Ok(())
 }

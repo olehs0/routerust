@@ -6,8 +6,8 @@ use db::Repository;
 use fake::fake;
 use helpers::generate;
 use helpers::test_db::get_test_repo;
-use realworld_domain::repositories::Repository as RepositoryTrait;
-use realworld_domain::{ArticleUpdate, PublishArticleError};
+use routeguide_domain::repositories::Repository as RepositoryTrait;
+use routeguide_domain::{ArticleUpdate, PublishArticleError};
 
 #[test]
 fn slugs_must_be_unique() {

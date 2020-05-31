@@ -1,9 +1,8 @@
-use dotenv;
-use std::env;
-use std::net::SocketAddr;
 use db::{connection::Repo, Repository};
+use dotenv;
 use std::cmp::{Ord, Ordering};
 use std::collections::BTreeMap;
+use std::net::SocketAddr;
 use std::pin::Pin;
 use std::sync::Arc;
 use std::time::Instant;
@@ -113,14 +112,13 @@ impl RouteGuide for RouteGuideService {
         &self,
         request: Request<tonic::Streaming<RouteNote>>,
     ) -> Result<Response<Self::RouteChatStream>, Status> {
-        println!("RouteChatServer");
-
         let mut notes = BTreeMap::new();
         let mut stream = request.into_inner();
 
         let output = async_stream::try_stream! {
             while let Some(note) = stream.next().await {
                 let note = note?;
+                println!("client_note {:?}", note);
 
                 let location = note.location.clone().unwrap();
 
@@ -128,7 +126,6 @@ impl RouteGuide for RouteGuideService {
                 location_notes.push(note);
 
                 for note in location_notes {
-                    println!("{:?}", note);
                     yield note.clone();
                 }
             }

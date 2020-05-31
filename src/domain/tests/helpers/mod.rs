@@ -7,7 +7,7 @@ use crate::helpers::generate::With;
 use db::models::{Article, NewArticle, NewUser, User};
 use db::queries::{articles, users};
 use db::{Repo, Repository};
-use realworld_domain::repositories::Repository as RepositoryTrait;
+use routeguide_domain::repositories::Repository as RepositoryTrait;
 use uuid::Uuid;
 
 pub fn create_users(repo: &Repo, num_users: i32) -> Vec<(User, String)> {
@@ -26,11 +26,11 @@ pub fn create_user(repo: &Repo) -> (User, String) {
     (new_user, clear_text_password)
 }
 
-pub fn create_users2(repo: &Repository, num_users: i32) -> Vec<(realworld_domain::User, String)> {
+pub fn create_users2(repo: &Repository, num_users: i32) -> Vec<(routeguide_domain::User, String)> {
     (0..num_users).map(|_| create_user2(repo)).collect()
 }
 
-pub fn create_user2(repo: &Repository) -> (realworld_domain::User, String) {
+pub fn create_user2(repo: &Repository) -> (routeguide_domain::User, String) {
     let (new_user, password) = generate::new_user();
     let new_user = repo
         .sign_up(new_user)
@@ -55,8 +55,8 @@ pub fn create_article(repo: &Repo, user: &User) -> Article {
 
 pub fn create_article2(
     repo: &Repository,
-    author: With<&realworld_domain::User>,
-) -> realworld_domain::Article {
+    author: With<&routeguide_domain::User>,
+) -> routeguide_domain::Article {
     let author = match author {
         With::Random => create_user2(repo).0,
         With::Value(user) => user.to_owned(),
