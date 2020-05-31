@@ -91,7 +91,7 @@ async fn run_route_chat(client: &mut RouteGuideClient<Channel>) -> Result<(), Bo
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let channel = Channel::from_static("http://localhost:8000")
+    let channel = Channel::from_static("http://localhost:8088")
         .rate_limit(5, Duration::from_secs(1))
         .concurrency_limit(256)
         .connect()

@@ -2,6 +2,7 @@ use db::{connection::Repo, Repository};
 use dotenv;
 use std::cmp::{Ord, Ordering};
 use std::collections::BTreeMap;
+use std::env;
 use std::net::SocketAddr;
 use std::pin::Pin;
 use std::sync::Arc;
@@ -138,7 +139,12 @@ impl RouteGuide for RouteGuideService {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv::dotenv().ok();
-    let addr = "127.0.0.1:8000".parse().unwrap();
+    let addr: SocketAddr = env::var("BIND_ADDRESS")
+        .expect("BIND_ADDRESS is not set")
+        .parse()
+        .expect("BIND_ADDRESS is invalid");
+
+    let jwt_secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set");
 
     let route_guide = RouteGuideService {
         features: Arc::new(data::load()),
