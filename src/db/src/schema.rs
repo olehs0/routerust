@@ -12,23 +12,6 @@ table! {
 }
 
 table! {
-    brands (id) {
-        id -> Int4,
-        name -> Varchar,
-    }
-}
-
-table! {
-    cars (id) {
-        id -> Int4,
-        engine_id -> Nullable<Int4>,
-        brand_id -> Nullable<Int4>,
-        price -> Float8,
-        release_year -> Int4,
-    }
-}
-
-table! {
     comments (id) {
         id -> Int8,
         author_id -> Uuid,
@@ -36,13 +19,6 @@ table! {
         body -> Text,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-    }
-}
-
-table! {
-    engines (id) {
-        id -> Int4,
-        name -> Varchar,
     }
 }
 
@@ -74,8 +50,6 @@ table! {
 }
 
 joinable!(articles -> users (user_id));
-joinable!(cars -> brands (brand_id));
-joinable!(cars -> engines (engine_id));
 joinable!(comments -> articles (article_id));
 joinable!(comments -> users (author_id));
 joinable!(favorites -> articles (article_id));
@@ -83,10 +57,7 @@ joinable!(favorites -> users (user_id));
 
 allow_tables_to_appear_in_same_query!(
     articles,
-    brands,
-    cars,
     comments,
-    engines,
     favorites,
     followers,
     users,
