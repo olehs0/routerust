@@ -8,26 +8,26 @@ message Car {
     int32 id = 1;
     double price = 2;
     uint32 release_year = 3;
-    Engine engine = 4;
-    Brand brand = 5;
+    EngineType engine_type = 4;
+    Manufacturer manufacturer = 5;
     google.protobuf.Timestamp updated_at = 6;
 }
 message CreateCarRequest { Car car = 1; }
 message CreateCarResponse { string id = 1; }
 message SearchCarRequest { FilterCar filter_car = 1; }
 
-message Engine {
-    string type = 1;
+message EngineType {
+    string title = 1;
 }
 
-message Brand {
-    string name = 1;
+message Manufacturer {
+    string title = 1;
 }
 
 message FilterCar {
     int32 id = 1;
-    Brand brand = 2;
-    Engine engine = 3;
+    Manufacturer manufacturer = 2;
+    EngineType engine_type = 3;
     double max_price = 4;
     double min_price = 5;
 }

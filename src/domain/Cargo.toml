@@ -1,0 +1,26 @@
+[package]
+name = "routeguide-domain"
+version = "0.1.0"
+authors = ["&bigbang <thebigbangfirst@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "routeguide_domain"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version= "1", features = ["derive"] }
+chrono = { version = "0.4.6", features = ["serde"] }
+log = "0.4.0"
+uuid = { version = "0.8.1", features = ["serde", "v4"] }
+itertools = "0.8.2"
+thiserror = "1.0.9"
+bcrypt = "0.6.1"
+anyhow = "1.0.26"
+
+[dev-dependencies]
+application = { package = "routeguide-application", path = "../application"}
+db = { package = "routeguide-db", path = "../db" }
+diesel = { version = "1.4", features = ["postgres", "extras", "uuidv07"] }
+r2d2 = "0.8"
+fake = "1.2.2"

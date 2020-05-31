@@ -117,8 +117,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n*** CLIENT STREAMING ***");
     run_record_route(&mut client).await?;
 
-    println!("\n*** BIDIRECTIONAL STREAMING ***");
-    run_route_chat(&mut client).await?;
+    // println!("\n*** BIDIRECTIONAL STREAMING ***");
+    // run_route_chat(&mut client).await?;
 
     Ok(())
 }

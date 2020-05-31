@@ -1,0 +1,25 @@
+[package]
+name = "routeguide-db"
+version = "0.1.0"
+authors = ["&bigbang <thebigbangfirst@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "routeguide_db"
+path = "src/lib.rs"
+
+[dependencies]
+diesel = { version = "1.4.4", features = ["postgres", "extras", "uuidv07"] }
+r2d2 = "0.8.8"
+serde = { version= "1.0.105", features = ["derive"] }
+chrono = { version = "0.4.6", features = ["serde"] }
+uuid = { version = "0.8.1", features = ["serde", "v4"] }
+domain = { package = "routeguide-domain", path = "../domain" }
+anyhow = "1.0.26"
+
+[dev-dependencies]
+application = { package = "routeguide-application", path = "../application"}
+fake = "1.2.2"
+log = "*"

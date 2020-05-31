@@ -1,6 +1,7 @@
-#[macro_use]
-extern crate diesel;
 use dotenv;
+use std::env;
+use std::net::SocketAddr;
+use db::{connection::Repo, Repository};
 use std::cmp::{Ord, Ordering};
 use std::collections::BTreeMap;
 use std::pin::Pin;
@@ -14,10 +15,6 @@ use tonic::{metadata::MetadataValue, Request, Response, Status};
 
 use routeguide::route_guide_server::{RouteGuide, RouteGuideServer};
 use routeguide::{Feature, Point, Rectangle, RouteNote, RouteSummary};
-
-pub mod db_connection;
-pub mod schema;
-mod services;
 
 pub mod routeguide {
     tonic::include_proto!("routeguide");
