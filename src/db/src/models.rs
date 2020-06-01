@@ -2,11 +2,28 @@ use crate::schema::articles;
 use crate::schema::comments;
 use crate::schema::favorites;
 use crate::schema::followers;
+use crate::schema::routes;
 use crate::schema::users;
 use chrono::{DateTime, Utc};
 use diesel::{AsChangeset, Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+
+#[derive(Queryable, Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct Route {
+    pub id: i32,
+    pub longitude: i32,
+    pub latitude: i32,
+    pub message: String,
+}
+
+#[derive(Insertable, Deserialize, Debug, Clone, PartialEq)]
+#[table_name = "routes"]
+pub struct NewRoute<'a> {
+    pub longitude: i32,
+    pub latitude: i32,
+    pub message: &'a str,
+}
 
 #[derive(Queryable, Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct User {
@@ -101,4 +118,3 @@ pub struct Comment {
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
-

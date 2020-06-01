@@ -3,3 +3,4 @@ pub mod comments;
 pub mod favorites;
 pub mod followers;
 pub mod users;
+pub mod routes;

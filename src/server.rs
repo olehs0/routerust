@@ -1,4 +1,4 @@
-use db::{connection::Repo, Repository};
+use db::connection::Repo;
 use dotenv;
 use std::cmp::{Ord, Ordering};
 use std::collections::BTreeMap;
@@ -116,11 +116,13 @@ impl RouteGuide for RouteGuideService {
         let mut notes = BTreeMap::new();
         let mut stream = request.into_inner();
 
+        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+        let repository = Repo::new(&database_url);
+
         let output = async_stream::try_stream! {
             while let Some(note) = stream.next().await {
                 let note = note?;
                 println!("client_note {:?}", note);
-
                 let location = note.location.clone().unwrap();
 
                 let location_notes = notes.entry(location).or_insert(vec![]);

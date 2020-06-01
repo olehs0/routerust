@@ -37,6 +37,15 @@ table! {
 }
 
 table! {
+    routes (id) {
+        id -> Int4,
+        longitude -> Int4,
+        latitude -> Int4,
+        message -> Varchar,
+    }
+}
+
+table! {
     users (id) {
         id -> Uuid,
         username -> Varchar,
@@ -60,5 +69,6 @@ allow_tables_to_appear_in_same_query!(
     comments,
     favorites,
     followers,
+    routes,
     users,
 );
