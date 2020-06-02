@@ -1,4 +1,5 @@
 use db::connection::Repo;
+use db::repository::create_route;
 use dotenv;
 use std::cmp::{Ord, Ordering};
 use std::collections::BTreeMap;
@@ -122,8 +123,8 @@ impl RouteGuide for RouteGuideService {
         let output = async_stream::try_stream! {
             while let Some(note) = stream.next().await {
                 let note = note?;
-                println!("client_note {:?}", note);
                 let location = note.location.clone().unwrap();
+                create_route(repository.clone(), location.longitude, location.latitude, &note.message);
 
                 let location_notes = notes.entry(location).or_insert(vec![]);
                 location_notes.push(note);

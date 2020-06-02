@@ -1,5 +1,5 @@
-use crate::models::{Article, NewArticle, NewComment, NewUser, UpdateUser};
-use crate::queries::{routes, articles, comments, favorites, followers, users};
+use crate::models::{Article, NewArticle, NewComment, NewRoute, NewUser, UpdateUser};
+use crate::queries::{articles, comments, favorites, followers, routes, users};
 use crate::shims::{to_article, to_comment};
 use crate::Repo;
 use anyhow::Error as OpaqueError;
@@ -13,6 +13,10 @@ use uuid::Uuid;
 /// This requires casting the diesel::Error into anyhow::Error first.
 pub fn to_db_error(e: Error) -> domain::DatabaseError {
     domain::DatabaseError::from(OpaqueError::from(e))
+}
+
+pub fn create_route<'a>(repo: Repo, longitude: i32, latitude: i32, message: &'a str) {
+    routes::insert(&repo, NewRoute::new(longitude, latitude, message)).unwrap();
 }
 
 #[derive(Clone)]

@@ -25,6 +25,16 @@ pub struct NewRoute<'a> {
     pub message: &'a str,
 }
 
+impl<'a> NewRoute<'a> {
+    pub fn new(longitude: i32, latitude: i32, message: &'a str) -> NewRoute {
+        NewRoute {
+            longitude,
+            latitude,
+            message,
+        }
+    }
+}
+
 #[derive(Queryable, Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct User {
     pub id: Uuid,
