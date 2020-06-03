@@ -118,13 +118,12 @@ impl RouteGuide for RouteGuideService {
         let mut stream = request.into_inner();
 
         let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-        let repository = Repo::new(&database_url);
 
         let output = async_stream::try_stream! {
             while let Some(note) = stream.next().await {
                 let note = note?;
                 let location = note.location.clone().unwrap();
-                create_route(repository.clone(), location.longitude, location.latitude, &note.message);
+                create_route(Repo::new(&database_url), location.longitude, location.latitude, &note.message);
 
                 let location_notes = notes.entry(location).or_insert(vec![]);
                 location_notes.push(note);
